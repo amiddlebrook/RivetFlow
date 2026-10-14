@@ -1,4 +1,5 @@
 import {body,first,list,execute,uid,now,json,required,fail,parseObject,type Env} from './core';
+type RecoveryRow={id:string;workflow_id:string;cursor:number;updated_at:string;definition_snapshot:string};
 type Row={id:string;workflow_id:string;status:string;cursor:number;updated_at:string;definition:string;description:string};
 export async function advancedApi(req:Request,env:Env,url:URL):Promise<Response|null>{
  const p=url.pathname,m=req.method;
@@ -26,6 +27,28 @@ export async function advancedApi(req:Request,env:Env,url:URL):Promise<Response|
   if(!updated.meta?.changes)fail(409,'Workflow changed concurrently; retry with fresh state');
   await execute(env,'INSERT INTO workflow_revisions VALUES(?,?,?,?,?,?)',uid(),w.id,version,definitionText,String(b.description||'').slice(0,2000),timestamp);
   return json({workflow_id:w.id,version,immutable_running_snapshots:true},201);
+ }
+
+ // Recovery is intentionally operator-initiated: no background replay of external AI requests.
+ if(p==='/api/recovery'&&m==='GET'){
+  const minutes=Math.max(1,Math.min(1440,Number(url.searchParams.get('stale_minutes'))||5));
+  const cutoff=new Date(Date.now()-minutes*60000).toISOString();
+  const items=await list<RecoveryRow>(env,"SELECT r.id,r.workflow_id,w.name workflow,r.cursor,r.updated_at,r.definition_snapshot FROM runs r JOIN workflows w ON w.id=r.workflow_id WHERE r.status='processing' AND r.updated_at<=? ORDER BY r.updated_at LIMIT 100",cutoff);
+  return json({stale_minutes:minutes,items:items.map(x=>({...x,definition_snapshot:undefined,step_kind:parseObject<{steps:{kind:string}[]}>(x.definition_snapshot,{steps:[]}).steps[x.cursor]?.kind||'unknown'}))});
+ }
+ const recovery=p.match(/^\/api\/runs\/([^/]+)\/recover$/);
+ if(recovery&&m==='POST'){
+  const r=await first<RecoveryRow&{status:string}>(env,'SELECT * FROM runs WHERE id=?',recovery[1]);if(!r)fail(404,'Run not found');
+  if(r.status!=='processing')fail(409,'Only stalled processing runs can be recovered');
+  const cutoff=new Date(Date.now()-5*60000).toISOString();
+  if(r.updated_at>cutoff)fail(409,'Processing lease has not expired (five minutes)');
+  const kind=parseObject<{steps:{kind:string}[]}>(r.definition_snapshot,{steps:[]}).steps[r.cursor]?.kind;
+  const replaySafe=kind==='simulate'||kind==='approval';
+  const next=replaySafe?'running':'failed';
+  const changed=await env.DB.prepare('UPDATE runs SET status=?,updated_at=? WHERE id=? AND status=? AND updated_at=?').bind(next,now(),r.id,'processing',r.updated_at).run();
+  if(!changed.meta?.changes)fail(409,'Run was changed concurrently; recovery not applied');
+  await execute(env,'INSERT INTO events VALUES(?,?,?,?,?,?,?)',uid(),r.id,r.cursor,'warning',replaySafe?'Stalled deterministic step released for retry':'Stalled AI step failed closed to prevent duplicate inference',JSON.stringify({step_kind:kind||'unknown',mode:replaySafe?'safe_resume':'manual_review_required'}),now());
+  return json({id:r.id,status:next,step_kind:kind||'unknown',replay_safe:replaySafe,reason:replaySafe?'Deterministic or approval step can be manually resumed':'AI side effects cannot be assumed idempotent; start a new reviewed run'});
  }
  return null;
 }

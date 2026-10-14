@@ -33,3 +33,7 @@ All persistent data is stored in per-application D1. The application frontend an
 ## Design tradeoffs
 
 Free-tier hosting deliberately limits scope. This is not a horizontally scalable, multi-tenant production system; global SLAs, audited governance and paid provider budgets cannot be validated with tiny synthetic workloads. No paid upgrade should occur automatically.
+
+## Phase 3: Stalled lease recovery
+
+The operator queue identifies processing states older than 5 minutes. Deterministic and approval steps can be released with compare-and-set. In-flight AI steps fail closed instead of being blindly replayed. This is not a scheduler, distributed worker or exactly-once external side-effect mechanism.

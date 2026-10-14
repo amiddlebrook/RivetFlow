@@ -127,6 +127,22 @@ export default {
       "id": "governance",
       "label": "Workflow Governance",
       "custom": "control"
+    },
+    {
+      "id": "recovery",
+      "label": "Recovery Queue",
+      "endpoint": "/api/recovery",
+      "columns": [
+        "workflow",
+        "cursor",
+        "step_kind",
+        "updated_at"
+      ],
+      "action": {
+        "title": "Recover stalled step",
+        "endpoint": "/api/runs/{id}/recover",
+        "input": []
+      }
     }
   ]
 };
