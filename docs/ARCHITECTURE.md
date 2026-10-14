@@ -37,3 +37,7 @@ Free-tier hosting deliberately limits scope. This is not a horizontally scalable
 ## Phase 3: Stalled lease recovery
 
 The operator queue identifies processing states older than 5 minutes. Deterministic and approval steps can be released with compare-and-set. In-flight AI steps fail closed instead of being blindly replayed. This is not a scheduler, distributed worker or exactly-once external side-effect mechanism.
+
+## Phase 4: Delegated API credentials
+
+`0004_access.sql` introduces expiring, revocable, SHA-256-hashed delegated credentials and an issuance/revocation audit. Authentication is enforced by `src/access.ts` from `withApi`, before any domain route executes. The shared API key policy does **not** implement object-level ACLs or tenant isolation. Access operations are confined to the root Worker `ADMIN_TOKEN`, and delegated keys are intentionally unable to administer credentials. See [`SECURITY.md`](SECURITY.md).
