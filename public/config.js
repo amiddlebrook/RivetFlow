@@ -110,6 +110,23 @@ export default {
           }
         ]
       }
+    },
+    {
+      "id": "events",
+      "label": "Operational Audit",
+      "endpoint": "/api/operational-events",
+      "columns": [
+        "workflow",
+        "message",
+        "severity",
+        "step_index",
+        "created_at"
+      ]
+    },
+    {
+      "id": "governance",
+      "label": "Workflow Governance",
+      "custom": "control"
     }
   ]
 };
