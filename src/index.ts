@@ -1,3 +1,4 @@
+import {domainLabApi} from './domain-lab';
 import {agentApi} from './agent';
 import {decisionApi} from './decision';
 import {studioApi} from './studio';
@@ -24,6 +25,7 @@ export async function api(req: Request, env: Env, url: URL): Promise<Response> {
   const decision=await decisionApi(req,env,url); if(decision) return decision;
   const studio=await studioApi(req,env,url); if(studio) return studio;
   const enhanced=await advancedApi(req,env,url); if(enhanced) return enhanced;
+  const lab=await domainLabApi(req,env,url); if(lab) return lab;
   if(p==='/api/seed'&&m==='POST') {
     const n=await first<{n:number}>(env,'SELECT count(*) n FROM workflows');if(count(n))return json({seeded:false});
     const id=uid(),ts=now(),definition={steps:[{name:'Validate incoming request',kind:'simulate',simulated_result:'Validated synthetic request payload'},{name:'Review reason',kind:'ai',instruction:'Summarize the customer request and its risks in two sentences. Do not claim to take external action.'},{name:'Manager approval',kind:'approval'},{name:'Finalize',kind:'simulate',simulated_result:'Simulated completion; no live integrations were called'}]};

@@ -4,6 +4,7 @@ export default {
   "accent": "#ed9057",
   "icon": "⬡",
   "sections": [
+    {"id":"preflight","label":"Runbook Preflight","custom":"domainlab"},
     {"id":"mission","label":"Execution Theater","custom":"mission"},
     {"id":"registry","label":"Records Explorer","custom":"registry"},
     {

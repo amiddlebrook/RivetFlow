@@ -49,7 +49,10 @@ flowchart LR
 
 Cloudflare Workers is request-driven; this is **not** a durable background task scheduler. External connectors, outbox delivery and exactly-once side effects require additional architecture.
 
-## Explore the live product
+## Explore the currently published product
+
+**Phase 22 code in this archive is not yet deployed.** The URL below, if available, may still host an earlier version. The GitHub repository for this source archive has not been published in this release.
+
 
 Open **[RivetFlow](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev)**. Public visitors can inspect the branded, read-only product shell; actual database content and API operations require a credential. Each deployed application has **its own** D1 database, UI, API and release pipeline.
 
@@ -65,7 +68,7 @@ The sample data is intentionally synthetic. UI counters reflect database records
 **Requirements:** Node.js 22+, npm, and a Cloudflare account only if deploying. Git and Python 3.12 are useful for contributions; Python is required for this repository's Python tests when present.
 
 ```bash
-git clone https://github.com/amiddlebrook/RivetFlow.git
+# Extract RivetFlow-Phase22-Complete-Source.zip first
 cd RivetFlow
 npm install
 npm run check
