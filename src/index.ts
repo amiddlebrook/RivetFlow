@@ -128,6 +128,8 @@ export default {
   if(controller.cron!=='0 4 * * *')throw new Error('Unknown maintenance schedule');
   const {cleanupWriteQuota}=await import('./write-quota');
   const removed=await cleanupWriteQuota(env);
+  const {cleanupBudget}=await import('./free-tier');
+  await cleanupBudget(env);
   await execute(env,`INSERT INTO maintenance_status(job,ran_at,rows_pruned) VALUES(?,?,?)
   ON CONFLICT(job) DO UPDATE SET ran_at=excluded.ran_at,rows_pruned=excluded.rows_pruned`,
   'write-quota',now(),removed);
