@@ -1,3 +1,5 @@
+> **Phase 28:** Approval decision, execution cursor, and audit event now commit atomically in D1, with injected-failure regression tests. See [atomic approvals](docs/PHASE28_ATOMIC_APPROVALS.md).
+
 > **Phase 27:** Chromium desktop/mobile and authenticated browser acceptance now runs on every **live Cloudflare deployment**, with guest-only screenshots. See [production browser verification](docs/PHASE27_BROWSER_ACCEPTANCE.md).
 
 > **Phase 25 — $0 guardrails:** Daily protected API budgets, opt-in remote AI, fail-closed quotas and quota status. [Policy and limits](docs/ZERO_COST_POLICY.md).
