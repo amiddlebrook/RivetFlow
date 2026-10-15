@@ -1,0 +1,12 @@
+/* RivetFlow / Phase 23 — industrial paper, signal blue, hazard orange, verified green. */
+:root{--bg:#f3f2ed;--surface:#ffffff;--surface2:#e9ece9;--line:#d1d9d6;--text:#26363b;--muted:#5c6d71;--accent:#ba4c24;--info:#205d8e;--success:#286e59;--warning:#a45b20}
+body{background:#f3f2ed;color:#26363b}
+.sidebar{background:#172e37;border-right:1px solid #31505a}.nav button.active,.nav button:hover{background:#244452;border-color:#315766}.nav button.active{box-shadow:inset 3px 0 #e89553}
+.btn,.lab-panel button{background:#ac4320;color:white}.btn.secondary{background:#fff;color:#205d8e;border:1px solid #aabdc8}
+.lab-hero{background:linear-gradient(113deg,#fff 0%,#eef3f5 72%,#f9efdf 100%);border-left:5px solid #ad5330}.lab-kicker{color:#205d8e;opacity:1}
+.lab-panel{background:#fff;border-color:#cbd8db}.lab-panel select,.lab-panel textarea{background:#f7f9f8;border:1px solid #9aadb4;color:#1f343d}
+.lab-stats span{background:#eaf0f6;border:1px solid #bbcbd7;color:#1e4f72}.lab-stats span:nth-child(2){background:#fff1dc;border-color:#e8cda9;color:#86501c}.lab-stats span:nth-child(3){background:#e5f4ec;border-color:#b0d5c4;color:#225e49}
+.lab-steps li{border-color:#c9d4d8;background:#f7fafb}.lab-steps li:has(.lab-step-approval){border-left:4px solid #226f5f}.lab-steps li:has(.lab-step-ai){border-left:4px solid #b95e2c}.lab-status.good{color:#225f4c}.lab-status.bad{color:#a23a2b}
+.rf16-strip{background:#1c3540}.rf17-lane:nth-child(1){border-top:4px solid #2e668f}.rf17-lane:nth-child(2){border-top:4px solid #af7426}.rf17-lane:nth-child(3){border-top:4px solid #a34438}.rf17-lane:nth-child(4){border-top:4px solid #2d745b}
+.rf17-detail{border-top:3px solid #2e668f}.rf17-gates{border-top:3px solid #a9732d}.rf16-ribbon button:nth-child(2).on{outline:2px solid #2e668f}.rf16-ribbon button:nth-child(4).on{outline:2px solid #2b755a}
+:where(button,a,input,select,textarea):focus-visible{outline:3px solid #2c7eb6;outline-offset:2px}
