@@ -10,3 +10,17 @@ body{background:#f3f2ed;color:#26363b}
 .rf16-strip{background:#1c3540}.rf17-lane:nth-child(1){border-top:4px solid #2e668f}.rf17-lane:nth-child(2){border-top:4px solid #af7426}.rf17-lane:nth-child(3){border-top:4px solid #a34438}.rf17-lane:nth-child(4){border-top:4px solid #2d745b}
 .rf17-detail{border-top:3px solid #2e668f}.rf17-gates{border-top:3px solid #a9732d}.rf16-ribbon button:nth-child(2).on{outline:2px solid #2e668f}.rf16-ribbon button:nth-child(4).on{outline:2px solid #2b755a}
 :where(button,a,input,select,textarea):focus-visible{outline:3px solid #2c7eb6;outline-offset:2px}
+
+/* Phase 27 mobile acceptance: compact operation controls without hiding navigation. */
+@media(max-width:640px){
+ .topbar .actions{display:grid!important;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)!important;gap:8px!important;width:100%;align-items:center!important;}
+ .topbar .actions>.enterprise-mode-button,.topbar .actions>.enterprise-quick{display:none!important;}
+ .topbar .actions>#auth,.topbar .actions>#refresh{grid-row:1;min-width:0!important;width:100%!important;max-width:none!important;padding:8px!important;font-size:14px!important;overflow-wrap:anywhere;}
+ .topbar .actions>#auth{grid-column:1;}
+ .topbar .actions>#refresh{grid-column:2;}
+ .topbar .actions>.readability-controls{grid-column:1/-1;grid-row:2;display:grid!important;grid-template-columns:minmax(104px,1fr) minmax(190px,2fr);gap:8px!important;width:100%!important;min-width:0;align-items:center;}
+ .readability-controls>.readability-menu{display:inline-flex!important;width:100%!important;margin:0!important;min-width:0!important;justify-content:center;}
+ .readability-controls>.readability-label{min-width:0;display:flex!important;align-items:center;justify-content:flex-end;gap:7px;white-space:nowrap!important;font-size:12px!important;margin:0!important;}
+ .readability-controls .readability-select{width:112px!important;min-width:112px!important;max-width:125px!important;font-size:14px!important;}
+ .readability-controls .readability-menu{border-radius:2px!important;background:#1f503f!important;color:#e8f0e5!important;border:1px solid #315b4b!important;}
+}
