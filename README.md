@@ -20,7 +20,7 @@ Workflow orchestration with accountable human decisions.
 
 ## The problem
 
-The hardest part of runbook control room is not drawing a dashboard—it is making consequential decisions inspectable, recoverable and accountable.
+Drawing a workflow is easy. Operating it safely is harder: which runbook revision did a run use, can an approval be repeated, and what happens after an interrupted step? RivetFlow makes those boundaries explicit with versioned definitions, idempotent transitions, human approval gates, and inspectable recovery state.
 
 **RivetFlow** is an engineering platform for accountable workflow orchestration. Its primary audience is **Operations engineers automating bounded, high-stakes processes**. Build runbooks, start an execution, stop for approval, and trace what happened.
 
