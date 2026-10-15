@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {executionSnapshot} from '../public/mission.js';
+test('execution theater isolates a selected workflow',()=>{const r=[{id:'1',workflow_id:'a',status:'running'},{id:'2',workflow_id:'b',status:'failed'},{id:'3',workflow_id:'a',status:'waiting_approval'}];const p=[{run_id:'3',status:'pending'},{run_id:'2',status:'pending'}];assert.deepEqual(executionSnapshot([],r,p,'a'),{total:2,active:2,failed:0,waiting:1,approvals:1})});
+test('execution theater refuses to count unrelated approval records',()=>{assert.equal(executionSnapshot([],[{id:'r',status:'completed'}],[{run_id:'r',status:'approved'}]).approvals,0)});
