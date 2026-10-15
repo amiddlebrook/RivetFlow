@@ -1,3 +1,5 @@
+> **Phase 30:** Deployments now fail on repository/Worker/D1 identity mismatch before migrations. This is a single-application deployment guard, not multitenant SSO. See [deployment boundaries](docs/PHASE30_DEPLOYMENT_BOUNDARIES.md).
+
 > **Phase 29:** Offline SQLite/D1-schema disaster-recovery rehearsal is enforced in both GitHub CI and deployment; live production D1 restoration is still unverified. See [recovery assurance](docs/PHASE29_RECOVERY_ASSURANCE.md).
 
 > **Phase 28:** Approval decision, execution cursor, and audit event now commit atomically in D1, with injected-failure regression tests. See [atomic approvals](docs/PHASE28_ATOMIC_APPROVALS.md).
