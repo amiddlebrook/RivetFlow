@@ -20,9 +20,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci --no-audit --no-fund
-      - uses: actions/upload-artifact@v4
-        with:
-          name: phase21-locked-dependencies
-          path: package-lock.json
+      - run: npm run verify:release
       - run: npm run check
       - run: npm test
