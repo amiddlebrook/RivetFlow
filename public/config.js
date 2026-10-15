@@ -4,6 +4,8 @@ export default {
   "accent": "#ed9057",
   "icon": "⬡",
   "sections": [
+    {"id":"agent","label":"Agent Control","custom":"agent"},
+    {"id":"decisions","label":"SLA Control","custom":"decisions"},
     {"id":"ops","label":"API Activity","custom":"ops"},
     {"id":"studio","label":"Execution Map","custom":"studio"},
     {

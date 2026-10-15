@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {createRequire} from 'node:module';
+import {readFileSync,readdirSync} from 'node:fs';
+const require=createRequire(import.meta.url);
+const {decisionApi}=require('./.compiled/decision.js');
+function fixture(){const db=new DatabaseSync(':memory:');for(const name of readdirSync('migrations').filter(n=>n.endsWith('.sql')).sort())db.exec(readFileSync('migrations/'+name,'utf8'));const env={DB:{prepare(sql){let args=[];return {bind(...a){args=a;return this},async first(){return db.prepare(sql).get(...args)||null},async all(){return {results:db.prepare(sql).all(...args)}},async run(){const r=db.prepare(sql).run(...args);return {meta:{changes:r.changes}}}}}}};return {db,env}}
+async function request(env,path,method='GET',data){const req=new Request('http://localhost:8787'+path,{method,headers:method==='POST'?{'content-type':'application/json'}:{},body:method==='POST'?JSON.stringify(data):undefined});return decisionApi(req,env,new URL(req.url))}
+test('workflow SLA policies are stored and threshold computed from real active runs',async()=>{const {db,env}=fixture();try{db.exec(`INSERT INTO workflows VALUES('wf','Onboard','desc','{}','2026-01-01','2026-01-01');INSERT INTO runs(id,workflow_id,status,cursor,context,created_at,updated_at) VALUES('run','wf','running',0,'{}','2020-01-01','2020-01-01');`);const put=await request(env,'/api/decision/slas','POST',{workflow_id:'wf',target_minutes:60,severity:'critical'});assert.equal(put.status,200);const data=await (await request(env,'/api/decision/slas')).json();assert.equal(data.policies[0].target_minutes,60);assert.equal(data.summary.breached,1);assert.equal(data.runs[0].status,'breached');}finally{db.close()}});
+test('invalid SLA bounds and foreign workflow IDs are rejected',async()=>{const {db,env}=fixture();try{await assert.rejects(request(env,'/api/decision/slas','POST',{workflow_id:'fake',target_minutes:15}),/Workflow not found/);db.exec(`INSERT INTO workflows VALUES('wf','Flow','desc','{}','2026-01-01','2026-01-01');`);await assert.rejects(request(env,'/api/decision/slas','POST',{workflow_id:'wf',target_minutes:0}),/target_minutes/)}finally{db.close()}});

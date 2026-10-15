@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS workflow_slas(workflow_id TEXT PRIMARY KEY REFERENCES workflows(id), target_minutes INTEGER NOT NULL CHECK(target_minutes BETWEEN 1 AND 10080), severity TEXT NOT NULL CHECK(severity IN ('warning','critical')),updated_at TEXT NOT NULL);

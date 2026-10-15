@@ -1,3 +1,5 @@
+import {agentApi} from './agent';
+import {decisionApi} from './decision';
 import {studioApi} from './studio';
 import { advancedApi } from './advanced';
 import { withApi, body, first, list, execute, uid, now, json, required, oneOf, fail, limit, generate, parseObject, count, type Env } from './core';
@@ -18,6 +20,8 @@ async function runDetails(env: Env, id: string) {
 }
 export async function api(req: Request, env: Env, url: URL): Promise<Response> {
   const p = url.pathname; const m = req.method;
+  const agent=await agentApi(req,env,url); if(agent) return agent;
+  const decision=await decisionApi(req,env,url); if(decision) return decision;
   const studio=await studioApi(req,env,url); if(studio) return studio;
   const enhanced=await advancedApi(req,env,url); if(enhanced) return enhanced;
   if(p==='/api/seed'&&m==='POST') {
