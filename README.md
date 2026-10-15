@@ -202,3 +202,7 @@ Root-only credential governance now includes `/api/access/insights` with seven-d
 ## Phase 16 · Factory Floor
 
 The new default `/#overview` replaces the generic summary with a first-class, D1-backed operations home. `/#mission` preserves the execution theater. See [Homepage system](docs/HOMEPAGE_SYSTEM.md).
+
+## Phase 18 · Security assurance
+
+The API now requires a Bearer credential for every protected route, including `localhost`; the previous implicit local-admin shortcut is removed. Configure `ADMIN_TOKEN` in your ignored `.dev.vars` for local development (use a **different** value from production). Worker and static assets send explicit browser security policies, request JSON is strictly byte-bounded, and scoped operators may remove only their own saved perspectives. New integration tests exercise the actual Worker entrypoint and replay all D1 migrations against SQLite. See [Phase 18 release assurance](docs/RELEASE_ASSURANCE.md). Organization isolation, SSO, immutable audit, and verified full browser E2E remain open requirements.
