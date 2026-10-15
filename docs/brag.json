@@ -1,0 +1,23 @@
+{
+  "accent": "#67DFBF",
+  "background": "#0E1726",
+  "hook": "AUTOMATE. WITH CONTROL.",
+  "subhook": "Runbooks, approvals and an audit trail in one operational console.",
+  "feature1": "A workflow you can explain.",
+  "feature2": "Approval is a real boundary.",
+  "proof": [
+    "Atomic approval audit",
+    "Snapshot run definitions",
+    "Fail-closed recovery"
+  ],
+  "mobileTitle": "Operate from anywhere.",
+  "mobileLines": [
+    "Inspect runs and gate status.",
+    "No AI call is required.",
+    "Demo records are illustrative."
+  ],
+  "closing": "Control the state. Keep the proof.",
+  "closingLine": "Explore the live runbook and approval workbench.",
+  "share": "RivetFlow makes execution state visible: versioned runbooks, human gates, and atomic approval records. Built on Cloudflare Workers and D1 with no required paid services.",
+  "name": "RivetFlow"
+}
