@@ -68,6 +68,27 @@ export async function api(req: Request, env: Env, url: URL): Promise<Response> {
   if(workflowId && m==='GET') { const w=await first<Workflow>(env,'SELECT * FROM workflows WHERE id=?',workflowId[1]); if(!w) fail(404,'Workflow not found'); return json({...w,definition:parseObject(w.definition,{steps:[]})}) }
   if(workflowId && m==='DELETE') { const n=await first<{n:number}>(env,'SELECT count(*) n FROM runs WHERE workflow_id=?',workflowId[1]); if(count(n)) fail(409,'Workflow has runs; retain its audit history'); await execute(env,'DELETE FROM workflows WHERE id=?',workflowId[1]); return json({deleted:true}) }
   if(p==='/api/runs' && m==='GET') return json({ items:await list(env,'SELECT r.*,w.name workflow FROM runs r JOIN workflows w ON r.workflow_id=w.id ORDER BY r.created_at DESC LIMIT ?',limit(url)) });
+  const drive=p.match(/^\/api\/runs\/([^/]+)\/drive$/);
+  if(drive && m==='POST') {
+    const b=await body(req);const maximum=b.max_steps===undefined?25:Number(b.max_steps);
+    if(!Number.isSafeInteger(maximum)||maximum<1||maximum>25)fail(400,'max_steps must be an integer from 1 to 25');
+    let advanced=0,run:Run|null=null,halted_on='';
+    for(let i=0;i<maximum;i++){
+      run=await first<Run>(env,'SELECT * FROM runs WHERE id=?',drive[1]);
+      if(!run)fail(404,'Run not found');
+      if(run.status!=='running'){halted_on=run.status;break;}
+      const snapshot=await first<{definition_snapshot:string}>(env,'SELECT definition_snapshot FROM runs WHERE id=?',run.id);
+      const sequence=parseObject<{steps:Step[]}>(snapshot?.definition_snapshot||'',{steps:[]}).steps;
+      const next=sequence[run.cursor];
+      if(!next){halted_on='invalid_snapshot';break;}
+      if(next.kind!=='simulate'){halted_on=next.kind==='approval'?'human_approval_required':'AI_step_requires_explicit_operator_action';break;}
+      const advanceUrl=new URL(`/api/runs/${encodeURIComponent(run.id)}/advance`,url);
+      await api(new Request(advanceUrl,{method:'POST'}),env,advanceUrl);
+      advanced++;
+    }
+    run=await first<Run>(env,'SELECT * FROM runs WHERE id=?',drive[1]);
+    return json({id:drive[1],advanced,status:run?.status||'unknown',cursor:run?.cursor||0,halted_on:halted_on||(advanced===maximum?'operator_limit':'unknown'),external_actions:0,remote_ai_calls:0});
+  }
   const advance=p.match(/^\/api\/runs\/([^/]+)\/advance$/);
   if(advance && m==='POST') {
     const r=await first<Run>(env,'SELECT * FROM runs WHERE id=?',advance[1]); if(!r) fail(404,'Run not found');

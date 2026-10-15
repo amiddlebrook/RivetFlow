@@ -8,6 +8,8 @@
 
 # RivetFlow
 
+> **Phase 26:** Deterministic operator batch — additional first-class product workflow and automated acceptance tests, while retaining free-tier fail-closed defaults. See [Phase 26 notes](docs/PHASE26_PRODUCT_WORKFLOWS.md).
+
 > **Phase 12: Live Atlas** — A production-deployed, authenticated spatial intelligence view using only records from the existing Workers/D1 APIs, unique entity-specific graph layouts, inspector, keyboard controls, responsive pan/zoom, layer filtering, and privacy-conscious export. [Interaction architecture and limitations](docs/SPATIAL_ATLAS.md).
 
 **Enterprise workflow operations · approval-driven automation**  
@@ -57,7 +59,7 @@ Cloudflare Workers is request-driven; this is **not** a durable background task 
 
 ## Explore the currently published product
 
-**Phase 22 code in this archive is not yet deployed.** The URL below, if available, may still host an earlier version. The GitHub repository for this source archive has not been published in this release.
+**Current source:** The corresponding GitHub `main` branch is authoritative. The live deployment is separately verified by GitHub Actions after each push; local ZIP contents are not an independent deployment guarantee.
 
 
 Open **[RivetFlow](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev)**. Public visitors can inspect the branded, read-only product shell; actual database content and API operations require a credential. Each deployed application has **its own** D1 database, UI, API and release pipeline.
