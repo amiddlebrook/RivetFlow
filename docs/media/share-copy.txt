@@ -1,0 +1,1 @@
+RivetFlow makes execution state visible: versioned runbooks, human gates, and atomic approval records. Built on Cloudflare Workers and D1 with no required paid services.
