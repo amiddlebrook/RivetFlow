@@ -4,6 +4,8 @@ export default {
   "accent": "#ed9057",
   "icon": "⬡",
   "sections": [
+    {"id":"ops","label":"API Activity","custom":"ops"},
+    {"id":"studio","label":"Execution Map","custom":"studio"},
     {
       "id": "workflows",
       "label": "Workflows",
