@@ -110,8 +110,12 @@ export async function api(req: Request, env: Env, url: URL): Promise<Response> {
     const r=await first<Run>(env,'SELECT * FROM runs WHERE id=?',a.run_id); if(!r || r.status!=='waiting_approval' || r.cursor!==a.step_index) fail(409,'Run not waiting at approval');
     const w=await first<Workflow>(env,'SELECT * FROM workflows WHERE id=?',r.workflow_id);
     const total=parseObject<{steps:Step[]}>((r as Run & {definition_snapshot?:string}).definition_snapshot||w?.definition,{steps:[]}).steps.length;
-    await execute(env,'UPDATE approvals SET status=?,note=?,decided_at=? WHERE id=? AND status=\'pending\'',decision,String(b.note||'').slice(0,1000),now(),decide[1]);
-    await execute(env,'UPDATE runs SET cursor=?,status=?,updated_at=? WHERE id=?',decision==='approved'?r.cursor+1:r.cursor,decision==='rejected'?'rejected':r.cursor+1>=total?'completed':'running',now(),r.id);
+    const claimed=await env.DB.prepare("UPDATE approvals SET status=?,note=?,decided_at=? WHERE id=? AND status='pending'")
+      .bind(decision,String(b.note||'').slice(0,1000),now(),decide[1]).run();
+    if(claimed.meta?.changes!==1)fail(409,'Approval already decided by another request');
+    const advanced=await env.DB.prepare("UPDATE runs SET cursor=?,status=?,updated_at=? WHERE id=? AND status='waiting_approval' AND cursor=?")
+      .bind(decision==='approved'?r.cursor+1:r.cursor,decision==='rejected'?'rejected':r.cursor+1>=total?'completed':'running',now(),r.id,r.cursor).run();
+    if(advanced.meta?.changes!==1)fail(409,'Run changed during approval resolution');
     await log(env,r.id,r.cursor,decision==='approved'?'success':'warning',`Approval ${decision}`,{note:String(b.note||'')});
     return json(await runDetails(env,r.id));
   }
