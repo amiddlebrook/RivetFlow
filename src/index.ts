@@ -115,4 +115,15 @@ export async function api(req: Request, env: Env, url: URL): Promise<Response> {
   }
   return fail(404,'Unknown API route');
 }
-export default { fetch(req:Request,env:Env){return withApi(req,env,api)} };
+export default {
+ fetch(req:Request,env:Env){return withApi(req,env,api)},
+ async scheduled(controller:{cron:string},env:Env):Promise<void> {
+  // Scheduled events are Cloudflare-internal. Never expose this action through HTTP.
+  if(controller.cron!=='0 4 * * *')throw new Error('Unknown maintenance schedule');
+  const {cleanupWriteQuota}=await import('./write-quota');
+  const removed=await cleanupWriteQuota(env);
+  await execute(env,`INSERT INTO maintenance_status(job,ran_at,rows_pruned) VALUES(?,?,?)
+  ON CONFLICT(job) DO UPDATE SET ran_at=excluded.ran_at,rows_pruned=excluded.rows_pruned`,
+  'write-quota',now(),removed);
+ }
+};
