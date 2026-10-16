@@ -1,0 +1,10 @@
+WEBVTT
+
+00:00:00.900 --> 00:00:06.400
+Meet RivetFlow. Versioned runbooks keep every execution consistent.
+
+00:00:06.400 --> 00:00:12.600
+Human approvals pause consequential steps. Idempotent transitions and an audit history
+
+00:00:12.600 --> 00:00:19.700
+make it clear what happened, why it happened, and how to recover.
