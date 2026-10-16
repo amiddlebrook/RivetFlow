@@ -1,0 +1,1 @@
+Meet RivetFlow. Versioned runbooks keep every execution consistent. Human approvals pause consequential steps. Idempotent transitions and an audit history make it clear what happened, why it happened, and how to recover.
