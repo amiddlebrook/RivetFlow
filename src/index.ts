@@ -1,4 +1,3 @@
-import { publicSalesInquiry } from './sales';
 import {domainLabApi} from './domain-lab';
 import {agentApi} from './agent';
 import {decisionApi} from './decision';
@@ -143,7 +142,7 @@ export async function api(req: Request, env: Env, url: URL): Promise<Response> {
   return fail(404,'Unknown API route');
 }
 export default {
- fetch(req:Request,env:Env){ if(new URL(req.url).pathname==='/api/sales/inquiries')return publicSalesInquiry(req,env);return withApi(req,env,api)},
+ fetch(req:Request,env:Env){return withApi(req,env,api)},
  async scheduled(controller:{cron:string},env:Env):Promise<void> {
   // Scheduled events are Cloudflare-internal. Never expose this action through HTTP.
   if(controller.cron!=='0 4 * * *')throw new Error('Unknown maintenance schedule');
@@ -153,9 +152,6 @@ export default {
   const removed=await cleanupWriteQuota(env);
   const {cleanupBudget}=await import('./free-tier');
   await cleanupBudget(env);
-  // Keep inbound business contact details for at most 30 days; prune old limits.
-  await execute(env,'DELETE FROM sales_inquiries WHERE created_at < ?',new Date(Date.now()-30*86400000).toISOString());
-  await execute(env,'DELETE FROM sales_inquiry_limits WHERE bucket < ?',new Date(Date.now()-7*86400000).toISOString().slice(0,10));
   await execute(env,`INSERT INTO maintenance_status(job,ran_at,rows_pruned) VALUES(?,?,?)
   ON CONFLICT(job) DO UPDATE SET ran_at=excluded.ran_at,rows_pruned=excluded.rows_pruned`,
   'write-quota',now(),removed);

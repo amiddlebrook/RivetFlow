@@ -44,9 +44,6 @@ export async function accessApi(req:Request,env:Env,url:URL,principal:Principal)
   if (p==='/api/access/me' && req.method==='GET') return json({kind:principal.kind,role:principal.role,id:principal.id,label:principal.label,route_prefix:principal.prefix});
   if (!p.startsWith('/api/access/')) return null;
   if (principal.role!=='admin') fail(403,'Only the root administrator may manage credentials');
-  if(p==='/api/access/sales-inquiries' && req.method==='GET') {
-    return json({items:await list(env,'SELECT id,name,email,organization,workflow_summary,created_at,status FROM sales_inquiries ORDER BY created_at DESC LIMIT 100'),retention_days:30});
-  }
   if(p==='/api/access/workspace' && req.method==='GET'){
     const {getWorkspaceBoundary}=await import('./workspace-boundary');
     return json(await getWorkspaceBoundary(env));
