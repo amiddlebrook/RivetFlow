@@ -8,6 +8,8 @@ Workflow orchestration with accountable human decisions.
 
 [![CI](https://github.com/amiddlebrook/RivetFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/amiddlebrook/RivetFlow/actions/workflows/ci.yml) [![Cloudflare deployment](https://github.com/amiddlebrook/RivetFlow/actions/workflows/deploy.yml/badge.svg)](https://github.com/amiddlebrook/RivetFlow/actions/workflows/deploy.yml) [![MIT License](https://img.shields.io/badge/license-MIT-2381C5)](LICENSE) [![Zero mandatory cost](https://img.shields.io/badge/hosting-free--tier%20only-129E80)](docs/ZERO_COST_POLICY.md)
 
+**[Commercial implementation offer](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev/offer/index.html)** · [Sales kit](docs/COMMERCIAL-SALES-KIT.md) · [SOW template](docs/COMMERCIAL-SOW-TEMPLATE.md)
+
 **[Launch application](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev)** · **[▶ WATCH THE 20-SECOND DEMO WITH SOUND](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev/showcase/index.html)** · [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Roadmap](docs/ROADMAP.md)
 
 [![RivetFlow — 20-second animated README preview; click to watch the complete narrated video with audio](docs/media/brag-inline.gif)](https://portfolio-rivetflow.averymiddlebrook2014.workers.dev/showcase/index.html)
