@@ -18,7 +18,7 @@
 - Source: https://github.com/amiddlebrook/RivetFlow/blob/main/public/offer/index.html
 - Product demo: https://portfolio-rivetflow.averymiddlebrook2014.workers.dev/showcase/index.html
 - Source code: https://github.com/amiddlebrook/RivetFlow
-- Initial contact: public GitHub issue from the landing page. Do not request or exchange sensitive customer data in issues.
+- Initial contact: private inquiry form on the landing page. Submissions are stored in Cloudflare D1, accessible to the root administrator at authenticated `GET /api/access/sales-inquiries`; purged by daily maintenance after 30 days. Do not request customer secrets or regulated data in the form.
 
 ## Whop product listing — ready-to-paste copy
 
@@ -107,9 +107,20 @@ Checkout-link documentation: https://whop.com/blog/create-checkout-links-whop/
 
 ## Important operational steps still required
 
-- Verify the public landing page deployed successfully via GitHub Actions and test it in a browser.
-- Configure a private buyer contact channel (public GitHub issues are only a stopgap).
+- Verify the Cloudflare deployment completed successfully and manually test the private inquiry form.
+- Check the root-admin D1 inbox routinely; the endpoint does not send email notifications. For the best experience, establish a separate verified business email/scheduling channel.
 - Create a Whop seller account/listing and checkout link with a connected authenticated account.
 - Find an interested buyer and complete paid contracting and delivery.
 
 Never represent these steps as completed until independently verified.
+
+## Reviewing private inquiries
+
+Use the root administrator token over HTTPS; never expose it in public browser code or issues. For example, in PowerShell (with `$env:APP_ADMIN_TOKEN` set privately):
+
+```powershell
+$headers = @{ Authorization = "Bearer $env:APP_ADMIN_TOKEN" }
+Invoke-RestMethod -Uri 'https://portfolio-rivetflow.averymiddlebrook2014.workers.dev/api/access/sales-inquiries' -Headers $headers
+```
+
+The form restricts requests to same-origin browser requests, validates submissions, uses a honeypot, caps accepted inquiries globally and per connection each day, and deletes old submissions after 30 days. These are anti-abuse guardrails, **not** a substitute for managed bot protection or a privacy/legal review. No email alert is currently sent for new inquiries.
